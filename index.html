@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>AMH Tracking</title>
+
+<style>
+
+body{
+margin:0;
+font-family:Arial,sans-serif;
+background:#f3f5f7;
+}
+
+.container{
+max-width:900px;
+margin:auto;
+padding:15px;
+}
+
+.card{
+background:#fff;
+border-radius:18px;
+padding:20px;
+margin-bottom:20px;
+box-shadow:0 2px 12px rgba(0,0,0,.08);
+}
+
+.header{
+text-align:center;
+}
+
+.header h1{
+margin:0;
+font-size:52px;
+color:#0b7a43;
+}
+
+.header h2{
+margin:10px 0;
+font-size:28px;
+}
+
+.header p{
+color:#666;
+}
+
+.badge{
+display:inline-block;
+padding:12px 25px;
+border-radius:30px;
+color:#fff;
+font-size:24px;
+font-weight:bold;
+}
+
+.transit{
+background:#ff9800;
+}
+
+.delivered{
+background:#28a745;
+}
+
+.pending{
+background:#dc3545;
+}
+
+.center{
+text-align:center;
+}
+.header img{
+display:block;
+margin:auto;
+max-width:450px;
+width:100%;
+}
+
+.header h2{
+margin:10px 0;
+font-size:32px;
+font-weight:bold;
+}
+
+.header p{
+color:#666;
+font-size:20px;
+}
+.timeline{
+border-left:4px solid #0b7a43;
+margin-left:10px;
+padding-left:20px;
+}
+
+.item{
+position:relative;
+margin-bottom:18px;
+}
+
+.item:before{
+content:"";
+width:14px;
+height:14px;
+background:#0b7a43;
+border-radius:50%;
+position:absolute;
+left:-28px;
+top:4px;
+}
+
+.time{
+font-size:13px;
+color:#666;
+}
+
+.status{
+font-weight:bold;
+font-size:18px;
+}
+
+.help{
+text-align:center;
+}
+
+.btn{
+display:inline-block;
+padding:12px 22px;
+border-radius:8px;
+text-decoration:none;
+color:white;
+font-weight:bold;
+margin:5px;
+}
+
+.call{
+background:#2563eb;
+}
+
+.whatsapp{
+background:#25D366;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="card header">
+
+<img src="https://drive.google.com/uc?export=view&id=1RwXRL7gX1H45FrhtAyygiiqEN9L2Dxo7">
+
+<h2>AYURVEDIC MEDICINE FOR HEART</h2>
+
+<p>Track Your Shipment</p>
+
+</div>
+
+
+<h2>AYURVEDIC MEDICINE FOR HEART</h2>
+
+<p>Track Your Shipment</p>
+
+</div>
+
+
+
+</div>
+
+<div class="card">
+
+<div class="center" id="statusArea">
+Loading...
+</div>
+
+<br>
+
+<div id="details">
+Loading...
+</div>
+
+</div>
+
+<div class="card">
+
+<h2>Tracking Timeline</h2>
+
+<div id="history">
+Loading...
+</div>
+
+</div>
+
+<div class="card help">
+
+<h2>Need Help?</h2>
+
+<a class="btn call" href="tel:+919358726799">
+📞 Call Support
+</a>
+
+<a class="btn whatsapp"
+href="https://wa.me/919358726799">
+💬 WhatsApp
+</a>
+
+</div>
+
+</div>
+
+<script>
+
+const params = new URLSearchParams(window.location.search);
+const awb = params.get("awb");
+
+if(!awb){
+
+document.getElementById("statusArea").innerHTML =
+"<h2>AWB Missing</h2>";
+
+document.getElementById("details").innerHTML = "";
+
+document.getElementById("history").innerHTML = "";
+
+}else{
+
+fetch("https://script.google.com/macros/s/AKfycbxGlYapnjR0tA-taA06mXj3TNnLax2wqh2B4gyJGmA3e4Hhyb0003RdAWa_belHp9KVug/exec?awb=" + awb)
+
+.then(response => response.json())
+
+.then(data => {
+
+let cls="transit";
+
+if(data.status==="Delivered"){
+cls="delivered";
+}
+
+if(data.status==="Pending"){
+cls="pending";
+}
+
+document.getElementById("statusArea").innerHTML=
+`
+<div class="badge ${cls}">
+${data.status}
+</div>
+`;
+
+document.getElementById("details").innerHTML=
+`
+<p><b>AWB:</b> ${data.awb}</p>
+<p><b>Location:</b> ${data.location}</p>
+<p><b>Last Scan:</b> ${data.lastScan}</p>
+`;
+
+let html='<div class="timeline">';
+
+const rows=data.history.split('\n');
+
+rows.reverse().forEach(row=>{
+
+if(row.trim()!==""){
+
+html+=`
+<div class="item">
+<div class="status">${row}</div>
+</div>
+`;
+
+}
+
+});
+
+html+='</div>';
+
+document.getElementById("history").innerHTML=html;
+
+})
+
+.catch(error => {
+
+document.getElementById("statusArea").innerHTML=
+"<h2>Unable to fetch tracking details</h2>";
+
+console.log(error);
+
+});
+
+}
+
+</script>
+
+</body>
+</html>
