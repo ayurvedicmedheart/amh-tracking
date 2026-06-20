@@ -1,13 +1,12 @@
 <!DOCTYPE html>
+
 <html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-
 <title>AMH Tracking</title>
 
 <style>
-
 body{
 margin:0;
 font-family:Arial,sans-serif;
@@ -32,19 +31,26 @@ box-shadow:0 2px 12px rgba(0,0,0,.08);
 text-align:center;
 }
 
-.header h1{
-margin:0;
-font-size:52px;
-color:#0b7a43;
+.header img{
+max-width:350px;
+width:100%;
+display:block;
+margin:auto;
 }
 
 .header h2{
 margin:10px 0;
-font-size:28px;
+font-size:32px;
+color:#0b7a43;
 }
 
 .header p{
 color:#666;
+font-size:18px;
+}
+
+.center{
+text-align:center;
 }
 
 .badge{
@@ -68,35 +74,15 @@ background:#28a745;
 background:#dc3545;
 }
 
-.center{
-text-align:center;
-}
-.header img{
-display:block;
-margin:auto;
-max-width:450px;
-width:100%;
-}
-
-.header h2{
-margin:10px 0;
-font-size:32px;
-font-weight:bold;
-}
-
-.header p{
-color:#666;
-font-size:20px;
-}
 .timeline{
 border-left:4px solid #0b7a43;
-margin-left:10px;
 padding-left:20px;
+margin-top:15px;
 }
 
 .item{
 position:relative;
-margin-bottom:18px;
+margin-bottom:15px;
 }
 
 .item:before{
@@ -110,14 +96,9 @@ left:-28px;
 top:4px;
 }
 
-.time{
-font-size:13px;
-color:#666;
-}
-
 .status{
 font-weight:bold;
-font-size:18px;
+font-size:16px;
 }
 
 .help{
@@ -141,8 +122,8 @@ background:#2563eb;
 .whatsapp{
 background:#25D366;
 }
-
 </style>
+
 </head>
 
 <body>
@@ -150,24 +131,9 @@ background:#25D366;
 <div class="container">
 
 <div class="card header">
-
-<img src="logo.png" style="max-width:350px;width:100%;">
-
+<img src="logo.png" alt="AMH Logo">
 <h2>AYURVEDIC MEDICINE FOR HEART</h2>
-
 <p>Track Your Shipment</p>
-
-</div>
-
-
-
-
-
-
-</div>
-
-
-
 </div>
 
 <div class="card">
@@ -184,7 +150,8 @@ Loading...
 
 </div>
 
-<div class="car
+<div class="card">
+<h2>Tracking Timeline</h2>
 
 <div id="history">
 Loading...
@@ -200,8 +167,7 @@ Loading...
 📞 Call Support
 </a>
 
-<a class="btn whatsapp"
-href="https://wa.me/919358726799">
+<a class="btn whatsapp" href="https://wa.me/919358726799">
 💬 WhatsApp
 </a>
 
@@ -220,7 +186,6 @@ document.getElementById("statusArea").innerHTML =
 "<h2>AWB Missing</h2>";
 
 document.getElementById("details").innerHTML = "";
-
 document.getElementById("history").innerHTML = "";
 
 }else{
@@ -233,41 +198,27 @@ fetch("https://script.google.com/macros/s/AKfycbxGlYapnjR0tA-taA06mXj3TNnLax2wqh
 
 let cls="transit";
 
-if(data.status==="Delivered"){
+if((data.status || "").toLowerCase().includes("deliver")){
 cls="delivered";
 }
 
-if(data.status==="Pending"){
-cls="pending";
-}
+document.getElementById("statusArea").innerHTML =
+'<div class="badge '+cls+'">'+(data.status || 'In Transit')+'</div>';
 
-document.getElementById("statusArea").innerHTML=
-`
-<div class="badge ${cls}">
-${data.status}
-</div>
-`;
-
-document.getElementById("details").innerHTML=
-`
-<p><b>AWB:</b> ${data.awb}</p>
-<p><b>Location:</b> ${data.location}</p>
-<p><b>Last Scan:</b> ${data.lastScan}</p>
-`;
+document.getElementById("details").innerHTML =
+'<p><b>AWB:</b> '+(data.awb || '')+'</p>'+
+'<p><b>Location:</b> '+(data.location || '')+'</p>'+
+'<p><b>Last Scan:</b> '+(data.lastScan || '')+'</p>';
 
 let html='<div class="timeline">';
-console.log(data);
-const rows=(data.history || "").split('\n');
+
+const rows=((data.history)||'').split('\n');
 
 rows.reverse().forEach(row=>{
 
 if(row.trim()!==""){
 
-html+=`
-<div class="item">
-<div class="status">${row}</div>
-</div>
-`;
+html += '<div class="item"><div class="status">'+row+'</div></div>';
 
 }
 
@@ -275,16 +226,16 @@ html+=`
 
 html+='</div>';
 
-document.getElementById("history").innerHTML=html;
+document.getElementById("history").innerHTML = html;
 
 })
 
 .catch(error => {
 
-document.getElementById("statusArea").innerHTML=
-"<h2>Unable to fetch tracking details</h2>";
-
 console.log(error);
+
+document.getElementById("statusArea").innerHTML =
+"<h2>Unable to fetch tracking details</h2>";
 
 });
 
