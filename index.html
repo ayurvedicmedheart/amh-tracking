@@ -256,8 +256,8 @@ document.getElementById("details").innerHTML=
 `;
 
 let html='<div class="timeline">';
-
-const rows=data.history.split('\n');
+console.log(data);
+const rows=(data.history || "").split('\n');
 
 rows.reverse().forEach(row=>{
 
