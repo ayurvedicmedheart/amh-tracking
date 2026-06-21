@@ -206,7 +206,7 @@ document.getElementById("details").innerHTML =
 '<p><b>Location:</b> '+(data.location || '')+'</p>'+
 '<p><b>Last Scan:</b> '+(data.lastScan || '')+'</p>'+
 '<p><b>Status:</b> '+(data.status || '')+'</p>'+
-'<p><b>Estimated Delivery:</b> '+(data.estimatedDelivery || 'Not Available')+'</p>';
+'<p><b>Estimated Delivery:</b> '+((data.estimatedDelivery || '').split('T')[0] || 'Not Available')+'</p>';
 let html = '<div class="timeline">';
 
 const rows = ((data.history)||'').split('\n');
