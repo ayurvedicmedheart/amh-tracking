@@ -1,125 +1,244 @@
-```javascript
-function updateDelhiveryTracking() {
+<!DOCTYPE html>
 
-  const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("ORDERS");
-  const token = "2e44961aabcd5b1b68d4ba7324c0d066fa4ab78b";
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AMH Tracking</title>
 
-  const lastRow = sheet.getLastRow();
-
-  for (let row = 2; row <= lastRow; row++) {
-
-    const awb = sheet.getRange(row, 21).getDisplayValue().trim();
-
-    if (!awb) continue;
-
-    const courier = sheet.getRange(row, 20).getDisplayValue().trim();
-    const dispatchDate = sheet.getRange(row, 19).getValue();
-    const currentStatus = sheet.getRange(row, 28).getDisplayValue().trim();
-
-    if (courier.toUpperCase() !== "DELHIVERY") continue;
-    if (currentStatus.toLowerCase().includes("delivered")) continue;
-    if (!dispatchDate) continue;
-
-    const today = new Date();
-    const diffDays = (today - new Date(dispatchDate)) / (1000 * 60 * 60 * 24);
-
-    if (diffDays > 10) continue;
-
-    try {
-
-      const url =
-        "https://track.delhivery.com/api/v1/packages/json/?waybill=" + awb;
-
-      const response = UrlFetchApp.fetch(url, {
-        headers: {
-          "Authorization": "Token " + token,
-          "Accept": "application/json"
-        },
-        muteHttpExceptions: true
-      });
-
-      const data = JSON.parse(response.getContentText());
-
-      if (!data.ShipmentData || !data.ShipmentData.length) continue;
-
-      const shipment = data.ShipmentData[0].Shipment;
-      const scans = shipment.Scans || [];
-
-      if (scans.length === 0) continue;
-
-      let history = "";
-
-      scans.forEach(scan => {
-
-        const d = scan.ScanDetail;
-
-        history +=
-          d.ScanDateTime +
-          " | " +
-          d.ScannedLocation +
-          " | " +
-          d.Scan +
-          "\n";
-
-      });
-
-      const latest = scans[scans.length - 1].ScanDetail;
-
-      sheet.getRange(row, 28).setValue(latest.Scan);               // AB
-      sheet.getRange(row, 29).setValue(latest.ScannedLocation);    // AC
-      sheet.getRange(row, 30).setValue(latest.ScanDateTime);       // AD
-      sheet.getRange(row, 31).setValue(history);                   // AE
-
-      sheet.getRange(row, 32).setValue(JSON.stringify(latest));    // AF Debug
-
-      sheet.getRange(row, 33).setValue(
-        latest.Instructions ||
-        latest.Instruction ||
-        latest.Remarks ||
-        ""
-      );                                                           // AG
-
-    } catch (e) {
-
-      sheet.getRange(row, 28).setValue("ERROR");
-      sheet.getRange(row, 32).setValue(e.toString());
-
-    }
-  }
+<style>
+body{
+margin:0;
+font-family:Arial,sans-serif;
+background:#f3f5f7;
 }
 
-function doGet(e) {
-
-  const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("ORDERS");
-
-  const awb = e.parameter.awb;
-
-  const data = sheet.getDataRange().getValues();
-
-  for (let i = 1; i < data.length; i++) {
-
-    if (String(data[i][20]) === String(awb)) {
-
-      return ContentService
-        .createTextOutput(JSON.stringify({
-
-          awb: data[i][20],
-          status: data[i][27],
-          location: data[i][28],
-          lastScan: data[i][29],
-          history: data[i][30],
-          instructions: data[i][32]
-
-        }))
-        .setMimeType(ContentService.MimeType.JSON);
-
-    }
-  }
-
-  return ContentService
-    .createTextOutput(JSON.stringify({
-      error: "AWB Not Found"
-    }))
-    .setMimeType(ContentService.MimeType.JSON);
+.container{
+max-width:900px;
+margin:auto;
+padding:15px;
 }
-```
+
+.card{
+background:#fff;
+border-radius:18px;
+padding:20px;
+margin-bottom:20px;
+box-shadow:0 2px 12px rgba(0,0,0,.08);
+}
+
+.header{
+text-align:center;
+}
+
+.header img{
+max-width:350px;
+width:100%;
+display:block;
+margin:auto;
+}
+
+.header h2{
+margin:10px 0;
+font-size:32px;
+color:#0b7a43;
+}
+
+.header p{
+color:#666;
+font-size:18px;
+}
+
+.center{
+text-align:center;
+}
+
+.badge{
+display:inline-block;
+padding:12px 25px;
+border-radius:30px;
+color:#fff;
+font-size:24px;
+font-weight:bold;
+}
+
+.transit{
+background:#ff9800;
+}
+
+.delivered{
+background:#28a745;
+}
+
+.timeline{
+border-left:4px solid #0b7a43;
+padding-left:20px;
+margin-top:15px;
+}
+
+.item{
+position:relative;
+margin-bottom:15px;
+}
+
+.item:before{
+content:"";
+width:14px;
+height:14px;
+background:#0b7a43;
+border-radius:50%;
+position:absolute;
+left:-28px;
+top:4px;
+}
+
+.status{
+font-weight:bold;
+font-size:16px;
+}
+
+.help{
+text-align:center;
+}
+
+.btn{
+display:inline-block;
+padding:12px 22px;
+border-radius:8px;
+text-decoration:none;
+color:white;
+font-weight:bold;
+margin:5px;
+}
+
+.call{
+background:#2563eb;
+}
+
+.whatsapp{
+background:#25D366;
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="card header">
+<img src="logo.png" alt="AMH Logo">
+<h2>AYURVEDIC MEDICINE FOR HEART</h2>
+<p>Track Your Shipment</p>
+</div>
+
+<div class="card">
+
+<div class="center" id="statusArea">
+Loading...
+</div>
+
+<br>
+
+<div id="details">
+Loading...
+</div>
+
+</div>
+
+<div class="card">
+<h2>Tracking Timeline</h2>
+<div id="history">
+Loading...
+</div>
+</div>
+
+<div class="card help">
+
+<h2>Need Help?</h2>
+
+<a class="btn call" href="tel:+919358726799">
+📞 Call Support
+</a>
+
+<a class="btn whatsapp" href="https://wa.me/919358726799">
+💬 WhatsApp
+</a>
+
+</div>
+
+</div>
+
+<script>
+
+const params = new URLSearchParams(window.location.search);
+const awb = params.get("awb");
+
+if(!awb){
+
+document.getElementById("statusArea").innerHTML =
+"<h2>AWB Missing</h2>";
+
+}else{
+
+fetch("https://script.google.com/macros/s/AKfycbxGlYapnjR0tA-taA06mXj3TNnLax2wqh2B4gyJGmA3e4Hhyb0003RdAWa_belHp9KVug/exec?awb=" + awb)
+
+.then(response => response.json())
+
+.then(data => {
+
+let currentStage =
+data.instructions ||
+data.status ||
+"In Transit";
+
+let cls = "transit";
+
+if(currentStage.toLowerCase().includes("deliver")){
+cls = "delivered";
+}
+
+document.getElementById("statusArea").innerHTML =
+'<div class="badge '+cls+'">'+currentStage+'</div>';
+
+document.getElementById("details").innerHTML =
+'<p><b>AWB:</b> '+(data.awb || '')+'</p>'+
+'<p><b>Location:</b> '+(data.location || '')+'</p>'+
+'<p><b>Last Scan:</b> '+(data.lastScan || '')+'</p>'+
+'<p><b>Status:</b> '+(data.status || '')+'</p>';
+
+let html = '<div class="timeline">';
+
+const rows = ((data.history)||'').split('\n');
+
+rows.reverse().forEach(row=>{
+
+if(row.trim()!==""){
+
+html += '<div class="item"><div class="status">'+row+'</div></div>';
+
+}
+
+});
+
+html += '</div>';
+
+document.getElementById("history").innerHTML = html;
+
+})
+
+.catch(error => {
+
+document.getElementById("statusArea").innerHTML =
+"<h2>Unable to fetch tracking details</h2>";
+
+console.log(error);
+
+});
+
+}
+
+</script>
+
+</body>
+</html>
