@@ -206,7 +206,17 @@ document.getElementById("details").innerHTML =
 '<p><b>Order No:</b> '+(data.orderNo || '')+'</p>'+
 '<p><b>Location:</b> '+(data.location || '')+'</p>'+
 '<p><b>Status:</b> '+(data.status || '')+'</p>'+
-'<p><b>Estimated Delivery:</b> '+((data.estimatedDelivery || '').split('T')[0] || 'Not Available')+'</p>';
+'<p><b>Estimated Delivery:</b> '+
+(
+data.estimatedDelivery
+? new Date(data.estimatedDelivery).toLocaleDateString('en-GB',{
+day:'numeric',
+month:'long',
+year:'numeric'
+})
+: 'Not Available'
+)
++'</p>';
 let html = '<div class="timeline">';
 
 const rows = ((data.history)||'').split('\n');
