@@ -247,7 +247,7 @@ let html = '<div class="timeline">';
 
 const rows = ((data.history)||'').split('\n');
 
-rows.reverse().forEach(row=>{
+rows.reverse().forEach((row,index)=>{
 
 if(row.trim()!==""){
 
