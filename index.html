@@ -295,7 +295,41 @@ cls = "delivered";
 
 document.getElementById("statusArea").innerHTML =
 '<div class="badge '+cls+'">'+currentStage+'</div>';
+let stage = 1;
 
+if ((data.history||"").includes("Shipment Received at Facility"))
+stage = 2;
+
+if ((data.history||"").includes("Vehicle Departed") ||
+    (data.history||"").includes("In Transit") ||
+    (data.history||"").includes("Trip Arrived"))
+stage = 3;
+
+if ((data.history||"").includes("Out For Delivery"))
+stage = 4;
+
+if ((data.status||"").toLowerCase().includes("deliver"))
+stage = 5;
+
+document.getElementById("progressBar").innerHTML = `
+<div class="progress-track">
+
+<div class="step ${stage>=1?'done':''}">📦<br>Booked</div>
+<div class="line ${stage>=2?'done':''}"></div>
+
+<div class="step ${stage>=2?'done':''}">🏢<br>Received</div>
+<div class="line ${stage>=3?'done':''}"></div>
+
+<div class="step ${stage>=3?'done':''}">🚚<br>Transit</div>
+<div class="line ${stage>=4?'done':''}"></div>
+
+<div class="step ${stage==4?'current':stage>4?'done':''}">🎯<br>OFD</div>
+<div class="line ${stage>=5?'done':''}"></div>
+
+<div class="step ${stage>=5?'done':''}">✅<br>Delivered</div>
+
+</div>
+`;
 document.getElementById("details").innerHTML =
 '<p><b>AWB:</b> '+(data.awb || '')+'</p>'+
 '<p><b>Order No:</b> '+(data.orderNo || '')+'</p>'+
