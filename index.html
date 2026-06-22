@@ -251,7 +251,21 @@ rows.reverse().forEach(row=>{
 
 if(row.trim()!==""){
 
-html += '<div class="item"><div class="status">'+row+'</div></div>';
+const parts = row.split('|');
+
+let time = parts[0] ? parts[0].trim() : '';
+let location = parts[1] ? parts[1].trim() : '';
+let status = parts[2] ? parts[2].trim() : row;
+
+let cls = index === 0 ? 'item current' : 'item';
+
+html += `
+<div class="${cls}">
+<div class="status">${status}</div>
+<div class="timeline-location">📍 ${location}</div>
+<div class="timeline-time">🕒 ${time}</div>
+</div>
+`;
 
 }
 
