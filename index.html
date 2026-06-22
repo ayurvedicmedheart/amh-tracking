@@ -115,8 +115,32 @@ margin:5px;
 background:#2563eb;
 }
 
-.whatsapp{
-background:#25D366;
+.item{
+position:relative;
+margin-bottom:25px;
+padding-bottom:10px;
+}
+
+.timeline-location{
+color:#2563eb;
+font-weight:bold;
+margin-top:4px;
+}
+
+.timeline-time{
+color:#666;
+font-size:14px;
+margin-top:3px;
+}
+
+.item.current .status{
+color:#ff9800;
+font-size:18px;
+}
+
+.item.current:before{
+background:#ff9800;
+box-shadow:0 0 10px #ff9800;
 }
 </style>
 
