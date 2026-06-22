@@ -5,7 +5,40 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>AMH Tracking</title>
+.progress-track{
+display:flex;
+align-items:center;
+justify-content:center;
+margin:25px 0;
+flex-wrap:wrap;
+}
 
+.step{
+text-align:center;
+font-size:14px;
+font-weight:bold;
+color:#999;
+min-width:70px;
+}
+
+.step.done{
+color:#28a745;
+}
+
+.step.current{
+color:#ff9800;
+}
+
+.line{
+width:40px;
+height:4px;
+background:#ddd;
+margin:0 5px;
+}
+
+.line.done{
+background:#28a745;
+}
 <style>
 body{
 margin:0;
