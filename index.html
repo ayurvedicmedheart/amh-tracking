@@ -349,22 +349,16 @@ if (
 };
 
 document.getElementById("progressBar").innerHTML = `
-<div class="progress-track">
-
-<div class="step ${stage>=1?'done':''}">📦<br>Booked</div>
-<div class="line ${stage>=2?'done':''}"></div>
-
-<div class="step ${stage>=2?'done':''}">🏢<br>Received</div>
-<div class="line ${stage>=3?'done':''}"></div>
-
-<div class="step ${stage>=3?'done':''}">🚚<br>Transit</div>
-<div class="line ${stage>=4?'done':''}"></div>
-
-<div class="step ${stage==4?'current':stage>4?'done':''}">🎯<br>OFD</div>
-<div class="line ${stage>=5?'done':''}"></div>
-
-<div class="step ${stage>=5?'done':''}">✅<br>Delivered</div>
-
+<div style="text-align:center;margin:20px 0;font-size:16px;font-weight:bold;line-height:2;">
+${stage>=1?'✓':'○'} Booked
+&nbsp;──&nbsp;
+${stage>=2?'✓':'○'} Received
+&nbsp;──&nbsp;
+${stage>=3?'✓':'○'} Transit
+&nbsp;──&nbsp;
+${stage>=4?'✓':'○'} OFD
+&nbsp;──&nbsp;
+${stage>=5?'✓':'○'} Delivered
 </div>
 `;
 document.getElementById("details").innerHTML =
