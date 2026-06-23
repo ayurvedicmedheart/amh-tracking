@@ -305,23 +305,37 @@ if ((data.status||"").toLowerCase().includes("deliver"))
 stage = 5;
 
 document.getElementById("progressBar").innerHTML = `
-<div class="progress-track">
+<div style="text-align:center;margin:20px 0;">
 
-<div class="step ${stage>=1?'done':''}">📦<br>Booked</div>
-<div class="line ${stage>=2?'done':''}"></div>
+<div style="
+font-size:24px;
+font-weight:bold;
+letter-spacing:2px;
+color:#28a745;
+margin-bottom:10px;
+">
+<span style="color:${stage>=1?'#28a745':'#bbb'}">📦</span>━━━━
+<span style="color:${stage>=2?'#28a745':'#bbb'}">🏢</span>━━━━
+<span style="color:${stage>=3?'#28a745':'#bbb'}">🚚</span>━━━━
+<span style="color:${stage>=4?'#ff9800':'#bbb'}">🎯</span>━━━━
+<span style="color:${stage>=5?'#28a745':'#bbb'}">✅</span>
+</div>
 
-<div class="step ${stage>=2?'done':''}">🏢<br>Received</div>
-<div class="line ${stage>=3?'done':''}"></div>
-
-<div class="step ${stage>=3?'done':''}">🚚<br>Transit</div>
-<div class="line ${stage>=4?'done':''}"></div>
-
-<div class="step ${stage==4?'current':stage>4?'done':''}">🎯<br>OFD</div>
-<div class="line ${stage>=5?'done':''}"></div>
-
-<div class="step ${stage>=5?'done':''}">✅<br>Delivered</div>
+<div style="
+display:flex;
+justify-content:space-between;
+font-size:11px;
+font-weight:bold;
+">
+<span>Booked</span>
+<span>Received</span>
+<span>Transit</span>
+<span>OFD</span>
+<span>Delivered</span>
+</div>
 
 </div>
+`;
 `;
 document.getElementById("details").innerHTML =
 '<p><b>AWB:</b> '+(data.awb || '')+'</p>'+
