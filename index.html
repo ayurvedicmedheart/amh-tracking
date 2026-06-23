@@ -206,25 +206,6 @@ margin:0 5px;
 .line.done{
 background:#28a745;
 }
-  @media (max-width:600px){
-
-.progress-track{
-display:grid;
-grid-template-columns:repeat(3,1fr);
-gap:15px;
-justify-items:center;
-}
-
-.line{
-display:none;
-}
-
-.step{
-min-width:60px;
-font-size:12px;
-}
-
-}
 </style>
 
 </head>
@@ -236,7 +217,7 @@ font-size:12px;
 <div class="card header">
 <img src="logo.png" alt="AMH Logo">
 <h2>AYURVEDIC MEDICINE FOR HEART</h2>
-<p>Your Trusted Partner for Heart Wellness ❤️</p>
+<p>Track Your Shipment</p>
 </div>
 
 <div class="card">
@@ -281,88 +262,65 @@ Loading...
 const params = new URLSearchParams(window.location.search);
 const awb = params.get("awb");
 
+if(!awb){
 
-<div style="
-display:flex;
-justify-content:space-between;
-font-size:11px;
-font-weight:bold;
-margin-top:-10px;
-">
-<span>Booked</span>
-<span>Received</span>
-<span>Transit</span>
-<span>OFD</span>
-<span>Delivered</span>
-</div>
-`;
+document.getElementById("statusArea").innerHTML =
+"<h2>AWB Missing</h2>";
 
-<div style="
-display:flex;
-justify-content:space-between;
-font-size:11px;
-font-weight:bold;
-margin-top:-10px;
-">
-<span>Booked</span>
-<span>Received</span>
-<span>Transit</span>
-<span>OFD</span>
-<span>Delivered</span>
-</div>
-`;}
+}else{
 
+fetch("https://script.google.com/macros/s/AKfycbxGlYapnjR0tA-taA06mXj3TNnLax2wqh2B4gyJGmA3e4Hhyb0003RdAWa_belHp9KVug/exec?awb=" + awb)
+
+.then(response => response.json())
+
+.then(data => {
+
+let currentStage =
+data.instructions ||
+data.status ||
+"In Transit";
+
+let cls = "transit";
+
+if(currentStage.toLowerCase().includes("deliver")){
+cls = "delivered";
+}
+
+document.getElementById("statusArea").innerHTML =
+'<div class="badge '+cls+'">'+currentStage+'</div>';
 let stage = 1;
 
-// Booked
-if (history.includes("manifest uploaded")) {
-    stage = 1;
-}
+if ((data.history||"").includes("Shipment Received at Facility"))
+stage = 2;
 
-// Received
-if (
-    history.includes("shipment picked up") ||
-    history.includes("pickup")
-) {
-    stage = 2;
-}
+if ((data.history||"").includes("Vehicle Departed") ||
+    (data.history||"").includes("In Transit") ||
+    (data.history||"").includes("Trip Arrived"))
+stage = 3;
 
-// Transit
-if (
-    history.includes("trip arrived") ||
-    history.includes("vehicle departed") ||
-    history.includes("shipment received at facility") ||
-    history.includes("bag received") ||
-    history.includes("added to bag") ||
-    history.includes("in transit")
-) {
-    stage = 3;
-}
+if ((data.history||"").includes("Out For Delivery"))
+stage = 4;
 
-// OFD
-if (history.includes("out for delivery")) {
-    stage = 4;
-}
-
-// Delivered
-if (
-    history.includes("delivered to consignee") ||
-    (data.status || "").toLowerCase().includes("delivered")
-) {
-    stage = 5;
-};
+if ((data.status||"").toLowerCase().includes("deliver"))
+stage = 5;
 
 document.getElementById("progressBar").innerHTML = `
-<div style="text-align:center;margin:20px 0;font-size:16px;font-weight:bold;line-height:2;">
-${stage>=1?'✓':'○'} Booked
-&nbsp;──&nbsp;
-${stage>=2?'✓':'○'} Received
-&nbsp;──&nbsp;
-${stage>=3?'✓':'○'} Transit
-&nbsp;──&nbsp;
-${stage>=4?'✓':'○'} OFD
-&nbsp;──&nbsp;
-${stage>=5?'✓':'○'} Delivered
+<div class="progress-track">
+
+<div class="step ${stage>=1?'done':''}">📦<br>Booked</div>
+<div class="line ${stage>=2?'done':''}"></div>
+
+<div class="step ${stage>=2?'done':''}">🏢<br>Received</div>
+<div class="line ${stage>=3?'done':''}"></div>
+
+<div class="step ${stage>=3?'done':''}">🚚<br>Transit</div>
+<div class="line ${stage>=4?'done':''}"></div>
+
+<div class="step ${stage==4?'current':stage>4?'done':''}">🎯<br>OFD</div>
+<div class="line ${stage>=5?'done':''}"></div>
+
+<div class="step ${stage>=5?'done':''}">✅<br>Delivered</div>
+
 </div>
 `;
 document.getElementById("details").innerHTML =
