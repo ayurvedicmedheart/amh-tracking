@@ -290,19 +290,40 @@ document.getElementById("statusArea").innerHTML =
 '<div class="badge '+cls+'">'+currentStage+'</div>';
 let stage = 1;
 
-if ((data.history||"").includes("Shipment Received at Facility"))
-stage = 2;
+let history = (data.history || "").toLowerCase();
 
-if ((data.history||"").includes("Vehicle Departed") ||
-    (data.history||"").includes("In Transit") ||
-    (data.history||"").includes("Trip Arrived"))
-stage = 3;
+// Booked
+if (history.includes("manifest uploaded"))
+    stage = 1;
 
-if ((data.history||"").includes("Out For Delivery"))
-stage = 4;
+// Received
+if (
+    history.includes("shipment picked up") ||
+    history.includes("pickup")
+)
+    stage = 2;
 
-if ((data.status||"").toLowerCase().includes("deliver"))
-stage = 5;
+// Transit
+if (
+    history.includes("trip arrived") ||
+    history.includes("vehicle departed") ||
+    history.includes("shipment received at facility") ||
+    history.includes("bag received") ||
+    history.includes("added to bag") ||
+    history.includes("in transit")
+)
+    stage = 3;
+
+// OFD
+if (history.includes("out for delivery"))
+    stage = 4;
+
+// Delivered
+if (
+    history.includes("delivered to consignee") ||
+    (data.status || "").toLowerCase().includes("deliver")
+)
+    stage = 5;
 
 document.getElementById("progressBar").innerHTML = `
 <div style="text-align:center;margin:20px 0;">
