@@ -281,31 +281,7 @@ Loading...
 const params = new URLSearchParams(window.location.search);
 const awb = params.get("awb");
 
-document.getElementById("progressBar").innerHTML = `
-<div style="
-display:flex;
-justify-content:space-between;
-align-items:center;
-font-size:22px;
-margin:20px 0;
-">
 
-<span style="color:${stage>=1?'#28a745':'#bbb'}">📦</span>
-<span style="flex:1;height:4px;background:${stage>=2?'#28a745':'#ddd'}"></span>
-
-<span style="color:${stage>=2?'#28a745':'#bbb'}">🏢</span>
-<span style="flex:1;height:4px;background:${stage>=3?'#28a745':'#ddd'}"></span>
-
-<span style="color:${stage>=3?'#28a745':'#bbb'}">🚚</span>
-<span style="flex:1;height:4px;background:${stage>=4?'#28a745':'#ddd'}"></span>
-
-<span style="color:${stage>=4?'#ff9800':'#bbb'}">🎯</span>
-<span style="flex:1;height:4px;background:${stage>=5?'#28a745':'#ddd'}"></span>
-
-<span style="color:${stage>=5?'#28a745':'#bbb'}">✅</span>
-
-</div>
-`;
 <div style="
 display:flex;
 justify-content:space-between;
