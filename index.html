@@ -281,8 +281,6 @@ Loading...
 const params = new URLSearchParams(window.location.search);
 const awb = params.get("awb");
 
-if(!awb){
-
 document.getElementById("progressBar").innerHTML = `
 <div style="
 display:flex;
@@ -307,6 +305,7 @@ margin:20px 0;
 <span style="color:${stage>=5?'#28a745':'#bbb'}">✅</span>
 
 </div>
+`;
 
 <div style="
 display:flex;
