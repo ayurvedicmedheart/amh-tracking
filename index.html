@@ -209,16 +209,19 @@ background:#28a745;
   @media (max-width:600px){
 
 .progress-track{
-  gap:12px;
-}
-
-.step{
-  min-width:60px;
-  font-size:12px;
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:15px;
+justify-items:center;
 }
 
 .line{
-  width:25px;
+display:none;
+}
+
+.step{
+min-width:60px;
+font-size:12px;
 }
 
 }
