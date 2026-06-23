@@ -283,27 +283,45 @@ const awb = params.get("awb");
 
 if(!awb){
 
-document.getElementById("statusArea").innerHTML =
-"<h2>AWB Missing</h2>";
+document.getElementById("progressBar").innerHTML = `
+<div style="
+display:flex;
+justify-content:space-between;
+align-items:center;
+font-size:22px;
+margin:20px 0;
+">
 
-}else{
+<span style="color:${stage>=1?'#28a745':'#bbb'}">📦</span>
+<span style="flex:1;height:4px;background:${stage>=2?'#28a745':'#ddd'}"></span>
 
-fetch("https://script.google.com/macros/s/AKfycbxGlYapnjR0tA-taA06mXj3TNnLax2wqh2B4gyJGmA3e4Hhyb0003RdAWa_belHp9KVug/exec?awb=" + awb)
+<span style="color:${stage>=2?'#28a745':'#bbb'}">🏢</span>
+<span style="flex:1;height:4px;background:${stage>=3?'#28a745':'#ddd'}"></span>
 
-.then(response => response.json())
+<span style="color:${stage>=3?'#28a745':'#bbb'}">🚚</span>
+<span style="flex:1;height:4px;background:${stage>=4?'#28a745':'#ddd'}"></span>
 
-.then(data => {
+<span style="color:${stage>=4?'#ff9800':'#bbb'}">🎯</span>
+<span style="flex:1;height:4px;background:${stage>=5?'#28a745':'#ddd'}"></span>
 
-let currentStage =
-data.instructions ||
-data.status ||
-"In Transit";
+<span style="color:${stage>=5?'#28a745':'#bbb'}">✅</span>
 
-let cls = "transit";
+</div>
 
-if(currentStage.toLowerCase().includes("deliver")){
-cls = "delivered";
-}
+<div style="
+display:flex;
+justify-content:space-between;
+font-size:11px;
+font-weight:bold;
+margin-top:-10px;
+">
+<span>Booked</span>
+<span>Received</span>
+<span>Transit</span>
+<span>OFD</span>
+<span>Delivered</span>
+</div>
+`;}
 
 document.getElementById("statusArea").innerHTML =
 '<div class="badge '+cls+'">'+currentStage+'</div>';
