@@ -307,17 +307,67 @@ stage = 5;
 document.getElementById("progressBar").innerHTML = `
 <div style="text-align:center;margin:20px 0;">
 
+<div style="display:flex;align-items:center;justify-content:center;">
+
 <div style="
-font-size:24px;
-font-weight:bold;
-color:#28a745;
-margin-bottom:10px;
-">
-<span style="color:${stage>=1?'#28a745':'#bbb'}">📦</span>━━━━
-<span style="color:${stage>=2?'#28a745':'#bbb'}">🏢</span>━━━━
-<span style="color:${stage>=3?'#28a745':'#bbb'}">🚚</span>━━━━
-<span style="color:${stage>=4?'#ff9800':'#bbb'}">🎯</span>━━━━
-<span style="color:${stage>=5?'#28a745':'#bbb'}">✅</span>
+width:22px;
+height:22px;
+border-radius:50%;
+background:${stage>=1?'#28a745':'#ddd'};
+"></div>
+
+<div style="
+width:45px;
+height:4px;
+background:${stage>=2?'#28a745':'#ddd'};
+"></div>
+
+<div style="
+width:22px;
+height:22px;
+border-radius:50%;
+background:${stage>=2?'#28a745':'#ddd'};
+"></div>
+
+<div style="
+width:45px;
+height:4px;
+background:${stage>=3?'#28a745':'#ddd'};
+"></div>
+
+<div style="
+width:22px;
+height:22px;
+border-radius:50%;
+background:${stage==3?'#ff9800':stage>3?'#28a745':'#ddd'};
+"></div>
+
+<div style="
+width:45px;
+height:4px;
+background:${stage>=4?'#28a745':'#ddd'};
+"></div>
+
+<div style="
+width:22px;
+height:22px;
+border-radius:50%;
+background:${stage==4?'#ff9800':stage>4?'#28a745':'#ddd'};
+"></div>
+
+<div style="
+width:45px;
+height:4px;
+background:${stage>=5?'#28a745':'#ddd'};
+"></div>
+
+<div style="
+width:22px;
+height:22px;
+border-radius:50%;
+background:${stage>=5?'#28a745':'#ddd'};
+"></div>
+
 </div>
 
 <div style="
@@ -325,6 +375,7 @@ display:flex;
 justify-content:space-between;
 font-size:11px;
 font-weight:bold;
+margin-top:10px;
 ">
 <span>Booked</span>
 <span>Received</span>
