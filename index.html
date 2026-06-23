@@ -308,17 +308,27 @@ document.getElementById("progressBar").innerHTML = `
 <div style="text-align:center;margin:20px 0;">
 
 <div style="
-font-size:24px;
-font-weight:bold;
-letter-spacing:2px;
-color:#28a745;
-margin-bottom:10px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+font-size:28px;
+margin-bottom:8px;
 ">
-<span style="color:${stage>=1?'#28a745':'#bbb'}">📦</span>━━━━
-<span style="color:${stage>=2?'#28a745':'#bbb'}">🏢</span>━━━━
-<span style="color:${stage>=3?'#28a745':'#bbb'}">🚚</span>━━━━
-<span style="color:${stage>=4?'#ff9800':'#bbb'}">🎯</span>━━━━
-<span style="color:${stage>=5?'#28a745':'#bbb'}">✅</span>
+
+<span style="color:${stage>=1?'#28a745':'#ccc'}">🟢</span>
+<span style="flex:1;height:4px;background:${stage>=2?'#28a745':'#ddd'}"></span>
+
+<span style="color:${stage>=2?'#28a745':'#ccc'}">🟢</span>
+<span style="flex:1;height:4px;background:${stage>=3?'#28a745':'#ddd'}"></span>
+
+<span style="color:${stage==3?'#ff9800':stage>3?'#28a745':'#ccc'}">🟠</span>
+<span style="flex:1;height:4px;background:${stage>=4?'#28a745':'#ddd'}"></span>
+
+<span style="color:${stage>=4?'#ff9800':'#ccc'}">⚪</span>
+<span style="flex:1;height:4px;background:${stage>=5?'#28a745':'#ddd'}"></span>
+
+<span style="color:${stage>=5?'#28a745':'#ccc'}">⚪</span>
+
 </div>
 
 <div style="
