@@ -420,7 +420,30 @@ document.getElementById("details").innerHTML =
 
   const est = data.estimatedDelivery || "";
   const status = (data.status || "").toLowerCase();
+const courier = (data.courier || "").toUpperCase();
 
+if (courier === "EKART") {
+
+    if (status.includes("shipment created")) {
+        return "Shipment yet to be dispatched";
+    }
+
+    if (
+        status.includes("pickup") ||
+        status.includes("transit") ||
+        status.includes("received")
+    ) {
+        return "Not Available";
+    }
+
+    if (status.includes("out for delivery")) {
+        return "Today";
+    }
+
+    if (status.includes("delivered")) {
+        return "Delivered";
+    }
+}
   if (!est) {
     return "Not Available";
   }
