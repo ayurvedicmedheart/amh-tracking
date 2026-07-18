@@ -417,11 +417,15 @@ document.getElementById("details").innerHTML =
 '<p><b>Estimated Delivery:</b> '+
 (
 data.estimatedDelivery
-? new Date(data.estimatedDelivery).toLocaleDateString('en-GB',{
-day:'numeric',
-month:'long',
-year:'numeric'
-})
+? (
+    isNaN(new Date(data.estimatedDelivery).getTime())
+      ? data.estimatedDelivery
+      : new Date(data.estimatedDelivery).toLocaleDateString('en-GB',{
+          day:'numeric',
+          month:'long',
+          year:'numeric'
+        })
+  )
 : 'Not Available'
 )
 +'</p>';
