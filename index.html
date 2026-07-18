@@ -416,17 +416,43 @@ document.getElementById("details").innerHTML =
 '<p><b>Status:</b> '+(data.status || '')+'</p>'+
 '<p><b>Estimated Delivery:</b> '+
 (
-data.estimatedDelivery
-? (
-    isNaN(new Date(data.estimatedDelivery).getTime())
-      ? data.estimatedDelivery
-      : new Date(data.estimatedDelivery).toLocaleDateString('en-GB',{
-          day:'numeric',
-          month:'long',
-          year:'numeric'
-        })
-  )
-: 'Not Available'
+(() => {
+
+  const est = data.estimatedDelivery || "";
+  const status = (data.status || "").toLowerCase();
+
+  if (!est) {
+    return "Not Available";
+  }
+
+  // अगर Date Valid है
+  const d = new Date(est);
+
+  if (!isNaN(d.getTime())) {
+
+    // अगर Delivery Fail / Rescheduled है और Date निकल चुकी है
+    if (
+      d < new Date() &&
+      (
+        status.includes("delivery attempt failed") ||
+        status.includes("undelivered") ||
+        status.includes("rescheduled")
+      )
+    ) {
+      return "Awaiting next delivery schedule";
+    }
+
+    return d.toLocaleDateString("en-GB", {
+      day: "numeric",
+      month: "long",
+      year: "numeric"
+    });
+  }
+
+  // Date नहीं है, केवल Message आया है
+  return est;
+
+})()
 )
 +'</p>';
 let html = '<div class="timeline">';
