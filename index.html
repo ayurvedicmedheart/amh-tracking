@@ -299,7 +299,9 @@ if (history.includes("manifest uploaded"))
 // Received
 if (
     history.includes("shipment picked up") ||
-    history.includes("picked up")
+    history.includes("picked up") ||
+    history.includes("pickup_complete") ||
+    history.includes("received at pickup hub")
 )
     stage = 2;
 
