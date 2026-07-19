@@ -307,15 +307,13 @@ if (
 
 // Transit
 if (
-    history.includes("trip arrived") ||
-    history.includes("vehicle departed") ||
-    history.includes("shipment received at facility") ||
-    history.includes("bag received") ||
-    history.includes("added to bag") ||
-    history.includes("in transit")
+    history.includes("in transit") ||
+    history.includes("received at motherhub") ||
+    history.includes("dispatched to") ||
+    history.includes("motherhub") ||
+    history.includes("received at hub")
 )
     stage = 3;
-
 // OFD
 if (history.includes("out for delivery"))
     stage = 4;
