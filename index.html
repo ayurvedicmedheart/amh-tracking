@@ -347,11 +347,14 @@ else if (courier === "DELHIVERY") {
     stage = 1;
 
     if (
-        status.includes("manifest") ||
-        status.includes("pickup")
-    ) {
-        stage = 2;
-    }
+        if (
+    status.includes("shipment picked") ||
+    status.includes("picked up") ||
+    status.includes("pickup complete") ||
+    status.includes("pickup done")
+) {
+    stage = 2;
+}
 
     if (
         status.includes("received at facility") ||
