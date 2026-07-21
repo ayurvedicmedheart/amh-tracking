@@ -368,9 +368,12 @@ else if (courier === "DELHIVERY") {
         stage = 4;
     }
 
-    if (status.includes("deliver")) {
-        stage = 5;
-    }
+    if (
+    status === "delivered" ||
+    status.includes("delivered to consignee")
+) {
+    stage = 5;
+}
 }
   else {
     // India Post
