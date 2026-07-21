@@ -291,38 +291,89 @@ document.getElementById("statusArea").innerHTML =
 let stage = 1;
 
 let history = (data.history || "").toLowerCase();
+let courier = (data.courier || "").toUpperCase();
 
-// Booked
-if (history.includes("manifest uploaded"))
-    stage = 1;
+stage = 1;
 
-// Received
-if (
+// =======================
+// EKART
+// =======================
+if (courier === "EKART") {
+
+  // Received
+  if (
     history.includes("shipment picked up") ||
     history.includes("picked up") ||
     history.includes("pickup_complete") ||
     history.includes("received at pickup hub")
-)
+  ) {
     stage = 2;
+  }
 
-// Transit
-if (
-    history.includes("in transit") ||
+  // Transit
+  if (
     history.includes("received at motherhub") ||
     history.includes("dispatched to") ||
     history.includes("motherhub") ||
-    history.includes("received at hub")
-)
+    history.includes("received at hub") ||
+    history.includes("in transit")
+  ) {
     stage = 3;
-// OFD
-if (history.includes("out for delivery"))
-    stage = 4;
+  }
 
-// Delivered
-if (
-    history.includes("delivered to consignee") ||
-    (data.status || "").toLowerCase().includes("deliver")
-)
+  // OFD
+  if (history.includes("out for delivery")) {
+    stage = 4;
+  }
+
+  // Delivered
+  if ((data.status || "").toLowerCase().includes("deliver")) {
+    stage = 5;
+  }
+}
+
+// =======================
+// DELHIVERY
+// =======================
+else if (courier === "DELHIVERY") {
+
+  // Received
+  if (
+    history.includes("manifest uploaded") ||
+    history.includes("pickup") ||
+    history.includes("shipment picked")
+  ) {
+    stage = 2;
+  }
+
+  // Transit
+  if (
+    history.includes("shipment received at facility") ||
+    history.includes("received at facility") ||
+    history.includes("in transit") ||
+    history.includes("bagged") ||
+    history.includes("linehaul") ||
+    history.includes("reached at") ||
+    history.includes("departed")
+  ) {
+    stage = 3;
+  }
+
+  // OFD
+  if (
+    history.includes("out for delivery") ||
+    history.includes("out for delivery")
+  ) {
+    stage = 4;
+  }
+
+  // Delivered
+  if ((data.status || "").toLowerCase().includes("deliver")) {
+    stage = 5;
+  }
+}
+
+// INDIA POST के लिए आपका पुराना logic वैसे ही रहेगा।
     stage = 5;
 
 document.getElementById("progressBar").innerHTML = `
