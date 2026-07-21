@@ -337,42 +337,36 @@ if (courier === "EKART") {
 // =======================
 else if (courier === "DELHIVERY") {
 
-  // Received
-  if (
-    history.includes("manifest uploaded") ||
-    history.includes("pickup") ||
-    history.includes("shipment picked")
-  ) {
-    stage = 2;
-  }
+    const status = (data.status || "").toLowerCase();
 
-  // Transit
-  if (
-    history.includes("shipment received at facility") ||
-    history.includes("received at facility") ||
-    history.includes("in transit") ||
-    history.includes("bagged") ||
-    history.includes("linehaul") ||
-    history.includes("reached at") ||
-    history.includes("departed")
-  ) {
-    stage = 3;
-  }
+    stage = 1;
 
-  // OFD
-  if (
-    history.includes("out for delivery") ||
-    history.includes("out for delivery")
-  ) {
-    stage = 4;
-  }
+    if (
+        status.includes("manifest") ||
+        status.includes("pickup")
+    ) {
+        stage = 2;
+    }
 
-  // Delivered
-  if ((data.status || "").toLowerCase().includes("deliver")) {
-    stage = 5;
-  }
+    if (
+        status.includes("received at facility") ||
+        status.includes("shipment received at facility") ||
+        status.includes("in transit") ||
+        status.includes("bagged") ||
+        status.includes("linehaul") ||
+        status.includes("departed")
+    ) {
+        stage = 3;
+    }
+
+    if (status.includes("out for delivery")) {
+        stage = 4;
+    }
+
+    if (status.includes("deliver")) {
+        stage = 5;
+    }
 }
-
 // INDIA POST के लिए आपका पुराना logic वैसे ही रहेगा।
     stage = 5;
 
