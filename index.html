@@ -327,9 +327,14 @@ if (courier === "EKART") {
   }
 
   // Delivered
-  if ((data.status || "").toLowerCase().includes("deliver")) {
+  const status = (data.status || "").toLowerCase();
+
+if (
+    status.includes("delivered") ||
+    status.includes("delivered to consignee")
+) {
     stage = 5;
-  }
+}
 }
 
 // =======================
