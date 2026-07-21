@@ -282,8 +282,8 @@ data.status ||
 
 let cls = "transit";
 
-if(currentStage.toLowerCase().includes("deliver")){
-cls = "delivered";
+if(currentStage.toLowerCase().startsWith("delivered")){
+    cls = "delivered";
 }
 
 document.getElementById("statusArea").innerHTML =
