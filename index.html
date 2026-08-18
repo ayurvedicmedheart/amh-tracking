@@ -377,6 +377,57 @@ else if (courier === "DELHIVERY") {
     stage = 5;
 }
 }
+  // =======================
+// SHADOWFAX
+// =======================
+else if (courier === "SHADOWFAX") {
+
+    const status = (data.status || "").toLowerCase();
+    const history = (data.history || "").toLowerCase();
+
+    stage = 1;
+
+    // Received
+    if (
+        status.includes("picked") ||
+        status.includes("assigned for seller pickup") ||
+        status.includes("out for pickup") ||
+        history.includes("picked") ||
+        history.includes("out for pickup")
+    ) {
+        stage = 2;
+    }
+
+    // Transit
+    if (
+        status.includes("in transit") ||
+        status.includes("received at") ||
+        status.includes("dispatched") ||
+        status.includes("hub") ||
+        history.includes("in transit") ||
+        history.includes("received at") ||
+        history.includes("dispatched")
+    ) {
+        stage = 3;
+    }
+
+    // OFD
+    if (
+        status.includes("out for delivery") ||
+        history.includes("out for delivery")
+    ) {
+        stage = 4;
+    }
+
+    // Delivered
+    if (
+        status.includes("delivered") ||
+        status.includes("delivered to consignee") ||
+        history.includes("delivered")
+    ) {
+        stage = 5;
+    }
+}
   else {
     // India Post
     // आपका पुराना India Post वाला logic यहाँ रहेगा
