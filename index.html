@@ -428,9 +428,62 @@ else if (courier === "SHADOWFAX") {
         stage = 5;
     }
 }
-  else {
-    // India Post
-    // आपका पुराना India Post वाला logic यहाँ रहेगा
+  // =======================
+// INDIA POST
+// =======================
+else if (courier === "INDIA POST") {
+
+    const status = (data.status || "").toLowerCase();
+    const history = (data.history || "").toLowerCase();
+
+    stage = 1;
+
+    // Received / Booked
+    if (
+        status.includes("booked") ||
+        status.includes("received") ||
+        history.includes("item booked") ||
+        history.includes("item received")
+    ) {
+        stage = 2;
+    }
+
+
+    // In Transit
+    if (
+        status.includes("dispatched") ||
+        status.includes("in transit") ||
+        status.includes("bagged") ||
+        status.includes("bag received") ||
+        status.includes("received at") ||
+        history.includes("item dispatched") ||
+        history.includes("bagged") ||
+        history.includes("bag received") ||
+        history.includes("received at")
+    ) {
+        stage = 3;
+    }
+
+
+    // Out For Delivery
+    if (
+        status.includes("out for delivery") ||
+        status.includes("out for delivery to") ||
+        history.includes("out for delivery")
+    ) {
+        stage = 4;
+    }
+
+
+    // Delivered
+    if (
+        status.includes("delivered") ||
+        status.includes("item delivered") ||
+        history.includes("item delivered") ||
+        history.includes("delivered")
+    ) {
+        stage = 5;
+    }
 }
 
 document.getElementById("progressBar").innerHTML = `
