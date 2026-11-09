@@ -279,7 +279,13 @@ let currentStage =
 data.instructions ||
 data.status ||
 "In Transit";
-
+// INDIA POST: Item Booked → Picked up
+if (
+  (data.courier || "").toUpperCase() === "INDIA POST" &&
+  currentStage.toLowerCase() === "item booked"
+) {
+  currentStage = "Picked up";
+}
 let cls = "transit";
 
 if(currentStage.toLowerCase().startsWith("delivered")){
