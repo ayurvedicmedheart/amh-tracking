@@ -655,7 +655,9 @@ const parts = row.split('|');
 let time = parts[0] ? parts[0].trim() : '';
 let location = parts[1] ? parts[1].trim() : '';
 let status = parts[2] ? parts[2].trim() : row;
-
+if (courier === "INDIA POST" && status.toLowerCase() === "item booked") {
+  status = "Picked up";
+}
 let cls = index === 0 ? 'item current' : 'item';
 
 html += `
